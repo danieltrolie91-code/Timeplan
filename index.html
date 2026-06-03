@@ -61,22 +61,21 @@
     </div>
   </div>
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzPNM9Gm9J1xxslyb4-uPGT17BlD_r_Erk62itbkirVnqc7ZG-3De0ZboSV9pxERbI/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxTQ6cJhQDfBsj67OPjVf08JNqrxsfP8Hz9HA3vs2DjYBmk_0OSQCIULfWuqXKEllk/exec";
 
     let allEvents = [], visningsDato = new Date(), scrollInterval = null, visKommune = false;
     window.onload = function() { startKlokke(); lastData(); };
     
-function lastData() {
-  fetch(API_URL, { method: 'GET', redirect: 'follow' })
-    .then(res => {
-      if (!res.ok) throw new Error();
-      return res.json();
-    })
-
-        .then(events => {
-          document.getElementById('status').style.display = 'none'; allEvents = events || []; renderDay();
-        })
-        .catch(err => { document.getElementById('status').innerText = "Tilkoblingsfeil mot Google-API."; });
+    function lastData() {
+      var script = document.createElement('script');
+      script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + 'callback=mottaDataFraGoogle';
+      document.body.appendChild(script);
+    }
+    
+    function mottaDataFraGoogle(events) {
+      document.getElementById('status').style.display = 'none';
+      allEvents = events || [];
+      renderDay();
     }
     
     function startKlokke() {
@@ -89,6 +88,7 @@ function lastData() {
     document.getElementById('prevDay').addEventListener('click', () => changeDate(-1));
     document.getElementById('nextDay').addEventListener('click', () => changeDate(1));
     function changeDate(days) { visningsDato.setDate(visningsDato.getDate() + days); renderDay(); }
+    
     function renderDay() {
       const container = document.getElementById('eventsContainer'); container.innerHTML = ''; if (scrollInterval) clearInterval(scrollInterval);
       document.getElementById('dateDisplay').innerText = visningsDato.toLocaleDateString('no-NO', { weekday: 'long', month: 'short', day: 'numeric' });
