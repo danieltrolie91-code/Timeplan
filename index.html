@@ -36,8 +36,7 @@
 <body>
   <div class="screen-wrapper">
     <div class="qr-side-column">
-      <!-- Venstre side: Mobil QR -->
-      <img class="qr-box-img" id="qrMobil" src="data:image/png;base64,..." alt="QR Mobil">
+      <img class="qr-box-img" id="qrMobil" src="HER_LIMER_DU_INN_BASE64_FOR_MOBIL" alt="QR Mobil">
       <div class="qr-text">Åpne på<br>mobilen</div>
     </div>
     <div class="container">
@@ -57,13 +56,11 @@
       </div>
     </div>
     <div class="qr-side-column">
-      <!-- Høyre side: MazeMap QR -->
-      <img class="qr-box-img" id="qrMaze" src="data:image/png;base64,..." alt="QR MazeMap">
+      <img class="qr-box-img" id="qrMaze" src="HER_LIMER_DU_INN_BASE64_FOR_MAZEMAP" alt="QR MazeMap">
       <div class="qr-text">Finn frem<br>MazeMap</div>
     </div>
   </div>
   <script>
-    // ➔ ERSTATT MED DIN GOOGLE APPS SCRIPT WEBAPP-URL SOM SLUTTER PÅ /exec:
     const API_URL = "HER_LIMER_DU_INN_LENKEN_FRA_GOOGLE";
 
     let allEvents = [], visningsDato = new Date(), scrollInterval = null, visKommune = false;
@@ -75,7 +72,7 @@
         .then(events => {
           document.getElementById('status').style.display = 'none'; allEvents = events || []; renderDay();
         })
-        .catch(err => { document.getElementById('status').innerText = "Tilkoblingsfeil mot Google-skriptet."; });
+        .catch(err => { document.getElementById('status').innerText = "Tilkoblingsfeil mot Google-API."; });
     }
     
     function startKlokke() {
@@ -88,7 +85,6 @@
     document.getElementById('prevDay').addEventListener('click', () => changeDate(-1));
     document.getElementById('nextDay').addEventListener('click', () => changeDate(1));
     function changeDate(days) { visningsDato.setDate(visningsDato.getDate() + days); renderDay(); }
-    
     function renderDay() {
       const container = document.getElementById('eventsContainer'); container.innerHTML = ''; if (scrollInterval) clearInterval(scrollInterval);
       document.getElementById('dateDisplay').innerText = visningsDato.toLocaleDateString('no-NO', { weekday: 'long', month: 'short', day: 'numeric' });
