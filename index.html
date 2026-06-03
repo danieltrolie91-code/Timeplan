@@ -66,9 +66,13 @@
     let allEvents = [], visningsDato = new Date(), scrollInterval = null, visKommune = false;
     window.onload = function() { startKlokke(); lastData(); };
     
-    function lastData() {
-      fetch(API_URL)
-        .then(res => res.json())
+function lastData() {
+  fetch(API_URL, { method: 'GET', redirect: 'follow' })
+    .then(res => {
+      if (!res.ok) throw new Error();
+      return res.json();
+    })
+
         .then(events => {
           document.getElementById('status').style.display = 'none'; allEvents = events || []; renderDay();
         })
